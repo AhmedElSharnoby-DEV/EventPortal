@@ -1,0 +1,157 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Home>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Home";
+}
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="overlay">
+        <h1 class="display-4">Welcome to the Ultimate Event Experience</h1>
+        <p class="lead">Discover, Book, and Enjoy Events Near You!</p>
+        <a href="#events" class="btn btn-primary btn-lg mt-3">Explore Events</a>
+    </div>
+</section>
+
+<!-- Events Section -->
+<section id="events" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-2 text-primary">Upcoming Events</h2>
+        <div class="d-flex flex-wrap justify-content-center gap-4">
+            @{
+                IPublishedContent? events = Model.Children.OfType<Events>().FirstOrDefault();
+                if (events?.Children != null)
+                {
+                    foreach (Event _event in events.Children)
+                    {
+                        <div class="event-card card shadow-sm border-0 col-md-4" style="width: 18rem;" data-id="@_event.Id">
+                            <img src="@_event.Image" class="card-img-top" alt="Event Image">
+                            <div class="card-body">
+                                <h5 class="card-title">@_event.Title</h5>
+                                <p class="card-text">@_event.Description</p>
+                                <a href="#" class="btn btn-outline-primary view-details"
+                                   data-title="@_event.Title"
+                                   data-description="@_event.Description"
+                                   data-image="@_event.Image">View Details</a>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-5" style="background: linear-gradient(163deg,rgba(255, 255, 255, 1) 0%, rgba(219, 213, 213, 0.75) 100%);">
+    <div class="container">
+        @{
+            List<IPublishedContent> childs = Model.Children().ToList();
+            About? about = Model.Children().OfType<About>().FirstOrDefault();
+            if (about is not null)
+            {
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <img src="@about!.Image" class="img-fluid rounded" alt="About us">
+                    </div>
+                    <div class="col-md-6">
+                        <h2>@about!.Title</h2>
+                        <p>@about!.Description</p>
+                        <a href="#" class="btn btn-primary mt-3">Learn More</a>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</section>
+
+<!-- Bootstrap 5 Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="" class="img-fluid mb-3 modal-image" alt="Event Image">
+                <h5 class="modal-title-text"></h5>
+                <p class="modal-description"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Required Scripts -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const viewDetailButtons = document.querySelectorAll('.view-details');
+        const modal = new bootstrap.Modal(document.getElementById('eventModal'));
+
+        viewDetailButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Get data from the clicked button
+                const title = this.getAttribute('data-title');
+                const description = this.getAttribute('data-description');
+                const image = this.getAttribute('data-image');
+
+                // Populate modal with data
+                document.querySelector('.modal-title-text').textContent = title;
+                document.querySelector('.modal-description').textContent = description;
+                document.querySelector('.modal-image').src = image;
+
+                // Show the modal
+                modal.show();
+            });
+        });
+    });
+</script>
+
+<style>
+    .hero {
+        background: url('https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=2612&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center center/cover no-repeat;
+        height: 60vh;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .overlay {
+        background: rgba(0, 0, 0, 0.5);
+        padding: 50px;
+        border-radius: 15px;
+    }
+
+    .event-card img {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .event-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .event-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .event-card img {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .event-card .card-body {
+            background-color: #ffffff;
+        }
+</style>
+

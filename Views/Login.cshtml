@@ -1,0 +1,78 @@
+﻿@using EventPortal.Controllers
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Login>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Login";
+
+}
+
+<div class="text-center mb-4 p-3 rounded" style="color: #0d6efd;">
+    <h1 class="display-5 fw-bold">Login Page</h1>
+</div>
+
+<section class="container mt-5">
+    <div class="row align-items-center justify-content-center">
+        <!-- Left Image (Hidden on small screens) -->
+        <div class="col-lg-6 d-none d-lg-block text-center">
+            <img src="https://img.freepik.com/free-photo/computer-security-with-login-password-padlock_107791-16191.jpg?t=st=1745919576~exp=1745923176~hmac=3288f2b1fb18da155a8669c08a56fbeacb7d769d7b9ec6d1678bca7b8f6a1eb9&w=1800"
+                 alt="Login Illustration"
+                 class="img-fluid rounded" style="max-width: 100%; height: auto;" />
+        </div>
+
+        <!-- Right Form -->
+        <div class="col-lg-6 col-md-10 col-sm-12">
+            @using (Html.BeginUmbracoForm<UserSurfaceController>("Login", null, new { @class = "needs-validation", novalidate = "" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="card p-4 shadow-sm border rounded">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="Email" required />
+                            <div class="invalid-feedback">Please enter a valid email.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="Password" required />
+                            <div class="invalid-feedback">Please enter your password.</div>
+                        </div>
+
+                        @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+                        {
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach (var error in ViewData.ModelState.Values.SelectMany(x => x.Errors))
+                                    {
+                                        <li>@error.ErrorMessage</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                        <button type="submit" class="btn btn-primary w-100">Sign In</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<script>
+    // Bootstrap form validation
+    (function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>

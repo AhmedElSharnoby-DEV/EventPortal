@@ -1,0 +1,169 @@
+﻿@using EventPortal.Constants
+@using Umbraco.Cms.Core.Media
+@using Umbraco.Cms.Core.Models
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Landing>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@inject IImageUrlGenerator ImageUrlGenerator
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    Event runningEvent = (Event)Model.ActualRunningEvent!;
+    string? imageUrl = Model.HeaderImage!.GetCropUrl(ImageConstants.Bannar, ImageUrlGenerator, true);
+    string? videoUrl = Model.IntroVideo!.MediaUrl();
+    List<Link> multiURLs = Model.Routers!.ToList();
+    bool showRouters = Model.ShowRouters;
+}
+
+<!-- Media Picker -->
+
+<section class="full-video-section">
+    <video autoplay loop muted playsinline>
+        <source src="@Model.IntroVideo!.MediaUrl()" type="video/mp4" />
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="video-overlay-bg"></div>
+
+    <div class="video-overlay-text">
+        <h1 class="display-5 fw-bold">Welcome to Active Events</h1>
+        <p class="lead">Discover exciting events happening now and featured highlights.</p>
+    </div>
+</section>
+
+<!-- Toggle -->
+
+@if (Model.ShowRouters)
+{
+    <!-- Multi URL Picker -->
+
+    <div class="d-flex justify-content-center gap-4 bg-dark py-3">
+        @foreach (Link link in Model.Routers!)
+        {
+            <a href="@link.Url" class="text-white text-decoration-none">@link.Name</a>
+        }
+    </div>
+}
+
+<!-- Rich Text Editor -->
+
+<div class="centered-section">
+    <div class="rich-text-content text-center">
+        @Model.Brief
+    </div>
+</div>
+
+@* 
+    <!-- Image Cropper -->
+    <div class="text-white text-center py-5 mb-5" style="
+    background: url('@Model.HeaderImage!.GetCropUrl(ImageConstants.Bannar, ImageUrlGenerator, true)') center center;">
+    <div class="container">
+        <h1 class="display-5 fw-bold">Welcome to Active Events</h1>
+        <p class="lead">Discover exciting events happening now and featured highlights.</p>
+    </div>
+</div> 
+*@
+
+<!-- Content Picker -->
+<div class="container mt-5">
+    <h2 class="mb-4 text-center text-primary">Actual Running Event</h2>
+    <div class="col-md-6 mx-auto">
+        <div class="card mb-4 shadow-sm">
+            <img src="@runningEvent.Image" class="card-img-top" alt="@runningEvent.Title" style="height: 250px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title">@runningEvent.Title</h5>
+                <p class="card-text">@runningEvent.Description</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Multi Node Tree Picker -->
+
+<h2 class="mb-4 mt-5 text-center text-primary">Featured Events</h2>
+    <div class="row">
+        @foreach (Event eventItem in Model.FeaturedEvents!)
+        {
+            <div class="col-md-4 d-flex">
+            <div class="card mb-4 shadow-sm w-100 h-100 d-flex flex-column event-card">
+                    <img src="@eventItem.Image" class="card-img-top" alt="@eventItem.Title" style="height: 200px; object-fit: cover;">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@eventItem.Title</h5>
+                        <p class="card-text flex-grow-1">@eventItem.Description</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <br /><br />
+<style>
+    .event-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .event-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+
+    .full-video-section {
+        position: relative;
+        width: 100%;
+        height: 300px; /* Adjust height as needed */
+        overflow: hidden;
+    }
+
+        .full-video-section video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .video-overlay-text {
+        position: relative;
+        z-index: 2;
+        color: white;
+        text-align: center;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .video-overlay-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.4); /* Optional dark overlay */
+        z-index: 1;
+    }
+
+
+    .centered-section {
+        height: 300px;
+        background: linear-gradient(135deg, #004085, #ffffff);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background 0.6s ease-in-out, color 0.6s ease-in-out;
+        background-size: 200% 200%;
+        background-position: left;
+    }
+
+        .centered-section:hover {
+            background-position: right;
+            color: black;
+        }
+</style>

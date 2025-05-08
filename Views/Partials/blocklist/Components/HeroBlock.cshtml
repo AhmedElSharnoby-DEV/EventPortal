@@ -1,0 +1,21 @@
+﻿@{
+    Hero hero = (Hero)Model;
+}
+
+<div class="carousel-item active cropped-image-container">
+    <img src="@hero.Image!.MediaUrl()" class="d-block w-100" alt="@hero.Title">
+</div>
+<style>
+    .cropped-image-container {
+        height: 400px; /* desired final height */
+        overflow: hidden;
+        position: relative;
+    }
+
+        .cropped-image-container img {
+            position: absolute;
+            top: -250px; /* crop 150px from the top */
+            left: 0;
+            width: 100%;
+        }
+</style>

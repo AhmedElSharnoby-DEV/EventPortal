@@ -1,0 +1,20 @@
+{
+  "propertyEditors": [
+    {
+      "alias": "My.PasswordEditor",
+      "name": "Password Editor",
+      "icon": "icon-lock",
+      "group": "Common",
+      "editor": {
+        "view": "/App_Plugins/PasswordEditor/passwordEditor.html",
+        "valueType": "STRING"
+      }
+    }
+  ],
+  "javascript": [
+    "/App_Plugins/PasswordEditor/passwordEditor.controller.js"
+  ],
+  "css": [
+    "/App_Plugins/PasswordEditor/passwordEditor.css"
+  ]
+}

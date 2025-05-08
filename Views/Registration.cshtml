@@ -1,0 +1,89 @@
+﻿@using EventPortal.Controllers
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Registration>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Registration";
+
+}
+
+<div class="text-center mb-4 p-3 rounded" style="color: #0d6efd;">
+    <h1 class="display-5 fw-bold">Registration Page</h1>
+</div>
+
+<section class="container mt-2">
+    <div class="row g-2 d-flex justify-content-center">
+        <!-- Left Image (Hidden on small screens) -->
+        <div class="col-lg-6 d-none d-lg-block text-center">
+            <img src="https://img.freepik.com/premium-vector/account-login-line-icon-new-user-register_1948-2986.jpg?w=1380"
+                 alt="Register Image"
+                 class="img-fluid" style="max-width: 100%; height: auto;" />
+        </div>
+
+        <!-- Right Form -->
+        <div class="col-lg-6 col-md-10 col-sm-12">
+            @using (Html.BeginUmbracoForm<UserSurfaceController>("Register", null, new { @class = "needs-validation", novalidate = "" }, FormMethod.Post))
+            {
+                <div class="card p-4 shadow-sm border rounded">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="Username" required />
+                            <div class="invalid-feedback">Please enter a username.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="Email" required />
+                            <div class="invalid-feedback">Please enter a valid email.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="Password" required />
+                            <div class="invalid-feedback">Please enter a password.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="confirmpassword" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="confirmpassword" name="ConfirmPassword" required />
+                            <div class="invalid-feedback">Please confirm your password.</div>
+                        </div>
+
+                        @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+                        {
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach (var error in ViewData.ModelState.Values.SelectMany(x => x.Errors))
+                                    {
+                                        <li>@error.ErrorMessage</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<script>
+    // Bootstrap form validation
+    (function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>

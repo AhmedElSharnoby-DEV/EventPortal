@@ -1,0 +1,12 @@
+﻿@{
+    Service service = (Service)Model;
+}
+<div class="col-md-4">
+    <div class="card h-100 shadow-sm">
+        <img src="@service.Image!.MediaUrl()" class="card-img-top" alt="@service.Title">
+        <div class="card-body">
+            <h5 class="card-title">@service.Title</h5>
+            <p class="card-text">@service.Description</p>
+        </div>
+    </div>
+</div>

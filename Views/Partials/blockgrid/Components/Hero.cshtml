@@ -1,0 +1,12 @@
+﻿@{
+    Hero hero = (Hero)Model;
+}
+
+<div class="col-md-4">
+    <div class="card h-100 shadow-sm">
+        <img src="@hero.Image!.MediaUrl()" class="card-img-top" alt="@hero.Title">
+        <div class="card-body">
+            <h5 class="card-title">@hero.Title</h5>
+        </div>
+    </div>
+</div>

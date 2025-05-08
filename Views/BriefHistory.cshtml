@@ -1,0 +1,20 @@
+﻿@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.BriefHistory>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    BlockGridModel historyGrid = Model.Body!;
+}
+
+@if (historyGrid != null)
+{
+    <div class="row">
+        @foreach (var block in historyGrid)
+        {
+            <div class="col-md-@block.ColumnSpan mb-4">
+                @await Html.PartialAsync($"blockgrid/Components/{block.Content.ContentType.Alias}", block.Content)
+            </div>
+        }
+    </div>
+}

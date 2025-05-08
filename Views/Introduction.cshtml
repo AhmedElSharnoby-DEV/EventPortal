@@ -1,0 +1,57 @@
+﻿@using Umbraco.Cms.Core.Models.Blocks
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Introduction>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Introduction";
+}
+@{
+    // This is a implementation for BlockList
+    List<BlockListItem>? heros = Model.Body?.Where(x => x.Content is Hero).ToList();
+    BlockListItem? brief = Model.Body?.Where(x => x.Content is Brief).FirstOrDefault();
+    List<BlockListItem>? services = Model.Body?.Where(x => x.Content is Service).ToList();
+
+}
+<!-- Hero Section -->
+<section id="hero" class="mb-4">
+    <div id="carouselExample" class="carousel slide">
+        <div class="carousel-inner">
+            @foreach (BlockListItem hero in heros!)
+            {
+                @await Html.PartialAsync($"blocklist/Components/HeroBlock", hero.Content)
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
+<!-- Brief Section -->
+<section id="brief" class="text-center mb-5">
+    <div class="container d-flex flex-column align-items-center">
+        @await Html.PartialAsync($"blocklist/Components/BriefBlock", brief!.Content)
+    </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="mb-5 text-center">
+    <div class="container">
+        <h2 class="mb-4">Our Services</h2>
+        <div class="row justify-content-center g-4">
+            @foreach (BlockListItem service in services!)
+            {
+                @await Html.PartialAsync($"blocklist/Components/ServiceBlock", service.Content)
+            }
+        </div>
+    </div>
+</section>
+
+
+
