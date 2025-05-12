@@ -1,0 +1,113 @@
+﻿@using EventPortal.SearchModel
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<SearchViewModel>
+@{
+    var results = Model.SearchResults;
+    var query = results.SearchQuery;
+    var pageNumber = results.PageNumber;
+    var totalPages = results.TotalPages;
+}
+
+<h1>@Model.Value("searchTitle", "Search Events")</h1>
+
+<form action="/searchpage/" method="GET" class="search-form">
+    <input type="text" name="query" value="@query" placeholder="Search events..." />
+    <button type="submit">Search</button>
+</form>
+
+@if (string.IsNullOrEmpty(query))
+{
+    <p>All Events (@results.TotalItems results)</p>
+}
+else
+{
+    <p>Search results for <strong>@query</strong> (@results.TotalItems results)</p>
+}
+
+@if (results.Results.Any())
+{
+    <ul class="search-results">
+        @foreach (var result in results.Results)
+        {
+            <li>
+                <h3><a href="@result.Url">@result.Title</a></h3>
+                @if (!string.IsNullOrEmpty(result.ImageUrl))
+                {
+                    <img src="@result.ImageUrl" alt="@result.Title" style="max-width: 100px;" />
+                }
+                <p>@result.Description</p>
+            </li>
+        }
+    </ul>
+
+    @if (totalPages > 1)
+    {
+        <div class="pagination">
+            <ul>
+                @if (pageNumber > 1)
+                {
+                    <li><a href="?page=@(pageNumber - 1)&query=@query">Previous</a></li>
+                }
+
+                @for (int p = 1; p <= totalPages; p++)
+                {
+                    <li class="@(p == pageNumber ? "active" : "")">
+                        <a href="?page=@p&query=@query">@p</a>
+                    </li>
+                }
+
+                @if (pageNumber < totalPages)
+                {
+                    <li><a href="?page=@(pageNumber + 1)&query=@query">Next</a></li>
+                }
+            </ul>
+        </div>
+    }
+}
+else if (!string.IsNullOrEmpty(query))
+{
+    <p>No results found for <strong>@query</strong>.</p>
+}
+<style>
+    .search-form {
+        margin-bottom: 20px;
+    }
+
+        .search-form input[type="text"] {
+            padding: 8px;
+            width: 300px;
+        }
+
+        .search-form button {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+    .search-results {
+        list-style: none;
+        padding: 0;
+    }
+
+        .search-results li {
+            margin-bottom: 20px;
+        }
+
+    .pagination ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        gap: 10px;
+    }
+
+    .pagination li.active a {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+    .pagination a {
+        text-decoration: none;
+        color: #007bff;
+    }
+</style>

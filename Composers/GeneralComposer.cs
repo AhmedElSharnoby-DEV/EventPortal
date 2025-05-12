@@ -16,6 +16,7 @@ namespace EventPortal.Composers
             builder.Services.AddTransient<PasswordEncryptionService>();
             builder.Services.AddScoped<IPaginationService, PaginationService>();
             builder.AddNotificationHandler<ContentSavingNotification, EventValidator>();
+            builder.Services.AddSingleton<ISearchService, SearchService>();
         }
     }
 }
